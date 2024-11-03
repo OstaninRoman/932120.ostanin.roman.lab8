@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Frontend Task№8</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        td {
+            padding: 5px;
+            border: 1px solid #ddd;
+        }
+        .controls {
+            white-space: nowrap;
+        }
+        button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <table id="dataTable">
+        <tbody></tbody>
+    </table>
+    
+    <button onclick="addRow()">Добавить элемент</button>
+    <button onclick="saveData()">Сохранить</button>
+    <div id="output"></div>
+
+    <script>
+        let data = [];
+
+        function addRow() {
+            const tbody = document.querySelector('tbody');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="text" class="name"></td>
+                <td><input type="text" class="value"></td>
+                <td class="controls">
+                    <button onclick="moveUp(this)">↑</button>
+                    <button onclick="moveDown(this)">↓</button>
+                    <button onclick="deleteRow(this)">x</button>
+                </td>`;
+            tbody.appendChild(row);
+        }
+
+        function moveUp(btn) {
+            const row = btn.closest('tr');
+            const prev = row.previousElementSibling;
+            if (prev) {
+                row.parentNode.insertBefore(row, prev);
+            }
+        }
+
+        function moveDown(btn) {
+            const row = btn.closest('tr');
+            const next = row.nextElementSibling;
+            if (next) {
+                row.parentNode.insertBefore(next, row);
+            }
+        }
+
+        function deleteRow(btn) {
+            btn.closest('tr').remove();
+        }
+
+        function saveData() {
+            const result = {};
+            const rows = document.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                const name = row.querySelector('.name').value;
+                const value = row.querySelector('.value').value;
+                if (name && value) {
+                    result[name] = value;
+                }
+            });
+
+            document.getElementById('output').textContent = JSON.stringify(result);
+        }
+    </script>
+</body>
+</html>
